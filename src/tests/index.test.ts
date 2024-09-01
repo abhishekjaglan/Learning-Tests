@@ -1,35 +1,25 @@
-import { describe, test, expect, it } from '@jest/globals';
-import { multiply, sum } from '../index';
+import { describe, it, expect } from '@jest/globals';
+import request from 'supertest';
+import { app } from '../index';
 
+describe('POST', () => {
 
-describe('sum module', () => {
-
-    test('adds 1 + 2 to equal 3', () => {
-        expect(sum(1,2)).toBe(3);
+    it('should return the sum of two numbers', async() => {
+        const res = await request(app).post('/sum').send({
+            a:10,
+            b:20
+        });
+        expect(res.statusCode).toBe(200);
+        expect(res.body.sum).toBe(30);
     });
 
-    test('adds 2 + 3 to equal 3', () => {
-        expect(sum(3,2)).toBe(5);
+    it('should return the sum of two negative numbers', async() => {
+        const res = await request(app).post('/sum').send({
+            a:-10,
+            b:-20
+        });
+        expect(res.statusCode).toBe(200);
+        expect(res.body.sum).toBe(-30);
     });
 
-    test('adds 5 + 6 to equal 11', () => {
-        expect(sum(5,6)).toBe(11);
-    });
-
-});
-
-describe('mulitply', () => {
-
-    it('multiply 2 * 3 equal 6', () => {
-        expect(multiply(2,3)).toBe(6);
-    });
-
-    it('multiply 5 * -3 equal -15', () => {
-        expect(multiply(5,-3)).toBe(-15);
-    });
-
-    it('multiply 0 * 3 equal 0', () => {
-        expect(multiply(0,3)).toBe(0);
-    });
-
-});
+})
