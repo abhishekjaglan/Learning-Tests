@@ -21,5 +21,13 @@ describe('POST', () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.sum).toBe(-30);
     });
-
+    
+    it('should return the sum of two negative numbers', async() => {
+        const res = await request(app).post('/sum').send({
+            a:'aerrg',
+            b:-20
+        });
+        expect(res.statusCode).toBe(411);
+        expect(res.body.msg).toBe('Wrong Input types');
+    });
 })

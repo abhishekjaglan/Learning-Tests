@@ -14,12 +14,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const express_1 = __importDefault(require("express"));
+const zod_1 = __importDefault(require("zod"));
 exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json());
+const sumInput = zod_1.default.object({
+    a: zod_1.default.number(),
+    b: zod_1.default.number()
+});
 exports.app.post('/sum', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const a = parseInt(req.body.a);
+    const parsedInput = sumInput.safeParse(req.body);
+    if (!parsedInput.success) {
+        return res.status(411).json({
+            msg: "Wrong Input types"
+        });
+    }
+    const a = parsedInput.data.a;
     console.log(a);
-    const b = parseInt(req.body.b);
+    const b = parsedInput.data.b;
     console.log(b);
     const answer = a + b;
     console.log("Answer::->  ", answer);

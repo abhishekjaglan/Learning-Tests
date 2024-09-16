@@ -1,13 +1,28 @@
 import express from "express";
+import z from 'zod';
 
 export const app = express();
 
 app.use(express.json());
 
+const sumInput = z.object({
+    a: z.number(),
+    b: z.number()
+});
+
 app.post('/sum', async (req, res) => {
-    const a = parseInt(req.body.a);
+
+    const parsedInput = sumInput.safeParse(req.body);
+
+    if(!parsedInput.success){
+        return res.status(411).json({
+            msg:"Wrong Input types"
+        })
+    }
+
+    const a = parsedInput.data.a;
     console.log(a);
-    const b = parseInt(req.body.b);
+    const b = parsedInput.data.b;
     console.log(b);
     const answer = a + b;
     console.log("Answer::->  ",answer)
