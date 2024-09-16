@@ -78,6 +78,46 @@ app.post('/multiply', async (req, res) => {
     });
 });
 
+app.post('/divide', async (req, res) => {
+
+    const parsedInput = sumInput.safeParse(req.body);
+
+    if(!parsedInput.success){
+        return res.status(411).json({
+            msg:"Wrong Input types"
+        })
+    };
+
+    const a = parsedInput.data.a;
+    console.log(a);
+    const b = parsedInput.data.b;
+    console.log(b);
+
+    if(a > 1000000 || b >1000000){
+        return res.status(422).json({
+            msg:"Wrong Input types"
+        });
+    }
+
+    const answer = a / b;
+    console.log("Answer::->  ",answer)
+
+    const request = await prismaClient.sum.create({
+        data:{
+            a: parsedInput.data.a,
+            b: parsedInput.data.b,
+            result: answer
+        }
+    })
+
+    res.status(200).json({
+        a,
+        b,
+        answer,
+        id: request.id
+    });
+});
+
 app.get('/sum', async (req, res) => {
     const parsedInput = sumInput.safeParse({
         a: Number(req.headers['a']),

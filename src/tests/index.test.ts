@@ -80,4 +80,32 @@ describe('Testss', () => {
         expect(res.body.answer).toBe(170);
         expect(res.body.id).toBe(1);
     });
+
+    // SPY on a function call
+
+    it('should return divided value', async () => {
+        prismaClient.sum.create.mockResolvedValue({
+            a: 4,
+            b: 2,
+            result: 2,
+            id: 1
+        });
+        vi.spyOn(prismaClient.sum, 'create');
+
+        const res = await request(app).post('/divide').send({
+            a: 4,
+            b: 2
+        });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.answer).toBe(2);
+        expect(res.body.id).toBe(1);
+        expect(prismaClient.sum.create).toHaveBeenCalledWith({
+            data:{
+                a: 4,
+                b: 2,
+                result: 2
+            }
+        });
+    });
 });
