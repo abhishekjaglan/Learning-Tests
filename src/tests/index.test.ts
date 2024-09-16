@@ -108,4 +108,32 @@ describe('Testss', () => {
             }
         });
     });
+
+    // extra test to test ci/cd pipeline
+    it("remainder should return 2", async() => {
+        prismaClient.sum.create.mockResolvedValue({
+            a: 10,
+            b: 4,
+            result: 2,
+            id: 1
+        });
+
+        vi.spyOn(prismaClient.sum, 'create');
+
+        const res = await request(app).post('/remainder').send({
+            a: 10,
+            b: 4
+        });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.answer).toBe(2);
+        expect(res.body.id).toBe(1);
+        expect(prismaClient.sum.create).toHaveBeenCalledWith({
+            data:{
+                a: 10,
+                b: 4,
+                result: 2
+            }
+        });
+    });
 });
