@@ -1,11 +1,13 @@
 import { describe, it, expect, vi } from 'vitest'
 import request from 'supertest';
 import { app } from '../index';
+import { prismaClient } from '../__mocks__/db';
 
 // vi.mock('../db', () => ({
 //     prismaClient: {sum: { create: vi.fn()}}
 // }));
 
+// mock components/functions for testing
 vi.mock('../db');
 
 describe('Testss', () => {
@@ -59,4 +61,23 @@ describe('Testss', () => {
         expect(res.statusCode).toBe(411);
 
     });
-})
+
+    // mock values 
+
+    it("should return mocked values for multiply", async() => {
+        prismaClient.sum.create.mockResolvedValue({
+            a: 5,
+            b: 34,
+            result: 170,
+            id: 1
+        });
+        const res = await request(app).post('/multiply').send({
+            a: 5,
+            b: 34
+        });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.answer).toBe(170);
+        expect(res.body.id).toBe(1);
+    });
+});
