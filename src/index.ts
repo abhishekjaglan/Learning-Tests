@@ -11,6 +11,8 @@ const sumInput = z.object({
     b: z.number()
 });
 
+console.log(Object.keys(prismaClient));
+
 app.post('/sum', async (req, res) => {
 
     const parsedInput = sumInput.safeParse(req.body);

@@ -12,7 +12,8 @@
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@types/express": "^4.17.21",
-    "ts-jest": "^29.2.5"
+    "ts-jest": "^29.2.5",
+    "vitest-mock-extended": "^2.0.2"
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
