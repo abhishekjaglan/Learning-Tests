@@ -122,7 +122,7 @@ app.post('/remainder', async (req, res) => {
 
     const parsedInput = sumInput.safeParse(req.body);
 
-    console.log(parsedInput);
+    console.log(parsedInput)
 
     if(!parsedInput.success){
         return res.status(411).json({
