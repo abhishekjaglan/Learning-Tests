@@ -32,12 +32,29 @@ const index_1 = require("../index");
         (0, globals_1.expect)(res.statusCode).toBe(200);
         (0, globals_1.expect)(res.body.sum).toBe(-30);
     }));
-    (0, globals_1.it)('should return the sum of two negative numbers', () => __awaiter(void 0, void 0, void 0, function* () {
+    (0, globals_1.it)('should return error status code due to wrong inputs', () => __awaiter(void 0, void 0, void 0, function* () {
         const res = yield (0, supertest_1.default)(index_1.app).post('/sum').send({
             a: 'aerrg',
             b: -20
         });
         (0, globals_1.expect)(res.statusCode).toBe(411);
         (0, globals_1.expect)(res.body.msg).toBe('Wrong Input types');
+    }));
+    (0, globals_1.it)("should be successfull, sending through headers", () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield (0, supertest_1.default)(index_1.app)
+            .get('/sum')
+            .set({
+            a: "1",
+            b: "1"
+        })
+            .send();
+        (0, globals_1.expect)(res.statusCode).toBe(200);
+        (0, globals_1.expect)(res.body.answer).toBe(2);
+    }));
+    (0, globals_1.it)("should not be successfull, sending through headers", () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield (0, supertest_1.default)(index_1.app)
+            .get('/sum')
+            .send();
+        (0, globals_1.expect)(res.statusCode).toBe(411);
     }));
 });

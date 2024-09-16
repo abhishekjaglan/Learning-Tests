@@ -40,6 +40,21 @@ exports.app.post('/sum', (req, res) => __awaiter(void 0, void 0, void 0, functio
         sum: answer
     });
 }));
+exports.app.get('/sum', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const parsedInput = sumInput.safeParse({
+        a: Number(req.headers['a']),
+        b: Number(req.headers['b'])
+    });
+    if (!parsedInput.success) {
+        return res.status(411).json({
+            msg: "Incorrect Input"
+        });
+    }
+    const answer = parsedInput.data.a + parsedInput.data.b;
+    res.json({
+        answer
+    });
+}));
 // app.listen(3000, () => {
 //     console.log('backend running on port 3000');
 // });

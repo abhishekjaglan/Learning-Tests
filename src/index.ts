@@ -34,6 +34,24 @@ app.post('/sum', async (req, res) => {
     });
 });
 
+app.get('/sum', async (req, res) => {
+    const parsedInput = sumInput.safeParse({
+        a: Number(req.headers['a']),
+        b: Number(req.headers['b'])
+    });
+
+    if(!parsedInput.success){
+        return res.status(411).json({
+            msg:"Incorrect Input"
+        });
+    }
+
+    const answer = parsedInput.data.a + parsedInput.data.b;
+
+    res.json({
+        answer
+    });
+})
 // app.listen(3000, () => {
 //     console.log('backend running on port 3000');
 // });
